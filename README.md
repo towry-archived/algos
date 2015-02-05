@@ -8,5 +8,5 @@ Algorithms in Go.
 - [x] select
 - [x] bubble
 - [x] quick
-- [ ] merge
+- [x] merge
 
