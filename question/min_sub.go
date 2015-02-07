@@ -7,57 +7,55 @@ package question
 //# http://ask.julyedu.com/question/141
 
 func MinSub(a string) string {
-	var last_new, first_new, count int
-	var d string
+	var sub []string
 
-	// find last_new, and total count
 	for i, _ := range a {
-		if indexOf(a, a[i], 0, i) == -1 {
-			last_new = i
-			count += 1
+		if !contains(sub, string(a[i])) {
+			sub = append(sub, string(a[i]))
 		}
 	}
 
-	// in reverse order, start from last_new
-	tmp := last_new - 1
-	count = count - 1
+	sub_len := len(sub)
+	a_len := len(a)
 
-	for tmp >= 0 {
-		if a[tmp] == a[last_new] {
-			first_new = last_new
-			break
+	var min int
+	var max int
+	var pos int
+	var bus []string
+
+	for i := 0; i <= a_len - sub_len; i += 1 {
+		for m := i; m < a_len; m += 1 {
+			if !contains(bus, string(a[m])) {
+				bus = append(bus, string(a[m]))
+			}
+
+			if len(bus) == sub_len {
+				if min == 0 {
+					min = max
+					pos = i
+				} else if min > max {
+					min = max
+					pos = i
+				}
+				break
+			}
+
+			max += 1
 		}
 
-		if indexOf(a, a[tmp], tmp+1, last_new) == -1 {
-			count -= 1
-		}
-
-		if count == 0 {
-			first_new = tmp
-			break
-		}
-
-		tmp -= 1
+		max = 0
+		bus = nil
 	}
-	
-	d = a[first_new:last_new+1]
-	
-	return d
+
+	return a[pos:pos+min+1]
 }
 
-// search char in string between m - n
-// base index is 0
-// n is exclusive
-func indexOf(s string, k uint8, m, n int) int {
-	var i int
-
-	i = m 
-	for i < n {
-		if (s[i] == k) {
-			return i
+func contains(a []string, b string) bool {
+	for _, c := range a {
+		if c == b {
+			return true
 		}
-		i++
 	}
 
-	return -1
+	return false
 }
